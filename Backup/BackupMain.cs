@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BackUp
+﻿namespace BackUp
 {
-    public class BackupMain
+    using System;
+    using System.Collections.Generic;
+
+    public static class BackupMain
     {
         static void Main(string[] args)
         {

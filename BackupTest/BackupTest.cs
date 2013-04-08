@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BackUp;
-
-namespace BackupTest
+﻿namespace BackupTest
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using BackUp;
+
     [TestClass]
     public class BackupTest
     {

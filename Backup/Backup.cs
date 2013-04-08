@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BackUp
+﻿namespace BackUp
 {
-    public class Backup
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    public sealed class Backup
     {
         private List<string> expandedSourceDirs;
 
@@ -90,13 +88,15 @@ namespace BackUp
             }
         }
 
-        private void CopyFile(string sourceFile, string destinationFile)
+        private bool CopyFile(string sourceFile, string destinationFile)
         {
+            bool copySuccessful = false;
+
             if (!File.Exists(destinationFile))
             {
                 Console.WriteLine("Copying {0}", sourceFile);
 
-                this.TryCopy(sourceFile, destinationFile);
+                copySuccessful = this.TryCopy(sourceFile, destinationFile);
             }
             else
             {
@@ -107,20 +107,24 @@ namespace BackUp
                 {
                     Console.WriteLine("Copying {0}", sourceFile);
 
-                    this.TryCopy(sourceFile, destinationFile);
+                    copySuccessful = this.TryCopy(sourceFile, destinationFile);
                 }
             }
+
+            return copySuccessful;
         }
 
-        private void TryCopy(string sourceFile, string destinationFile)
+        private bool TryCopy(string sourceFile, string destinationFile)
         {
             try
             {
                 File.Copy(sourceFile, destinationFile, true);
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Failed to copy {0} because: {1}", sourceFile, e.ToString());
+                return false;
             }
         }
     }
