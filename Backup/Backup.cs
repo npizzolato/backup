@@ -5,12 +5,23 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// Class to backup files to a location
+    /// </summary>
     public sealed class Backup
     {
         private List<string> expandedSourceDirs;
 
         private List<string> expandedDestinationDirs;
 
+        private StreamWriter writer;
+
+        /// <summary>
+        /// Initalizes a new instance of the <see cref="Backup"/> class
+        /// </summary>
+        /// <param name="sourceDir">The source directory</param>
+        /// <param name="destinationDir">The destination directory</param>
+        /// <param name="l1Dirs">The level 1 directories in the source to copy to the destination</param>
         public Backup(string sourceDir, string destinationDir, List<string> l1Dirs)
         {
             if (string.IsNullOrWhiteSpace(sourceDir))
@@ -42,32 +53,54 @@
             }
         }
 
+        /// <summary>
+        /// Gets the list of level 1 directories
+        /// </summary>
         public List<string> L1Dirs { get; private set; }
 
-        public string SourceDir { get; set; }
+        /// <summary>
+        /// Gets the source directory
+        /// </summary>
+        public string SourceDir { get; private set; }
 
-        public string DestinationDir { get; set; }
+        /// <summary>
+        /// Gets the destination directory
+        /// </summary>
+        public string DestinationDir { get; private set; }
 
-        public bool CopyAllFiles()
+        /// <summary>
+        /// Copies all files in the level 1 directories in the source to the destination
+        /// </summary>
+        public void CopyAllFiles()
         {
-            bool copySuccessful = false;
+            string path = Path.Combine(Path.GetTempPath(), "backup-" + DateTime.Now + ".txt");
 
-            List<string> sourceDirs = Directory.EnumerateDirectories(this.SourceDir).ToList();
-
-            foreach (string dir in sourceDirs.Where(e => this.expandedSourceDirs.Exists(f => f.Equals(e, StringComparison.OrdinalIgnoreCase))))
+            using (this.writer = new StreamWriter(path))
             {
-                Console.WriteLine("{0}Copying {1}", Environment.NewLine, dir);
+                List<string> sourceDirs = Directory.EnumerateDirectories(this.SourceDir).ToList();
 
-                string destination = dir.Replace(this.SourceDir, this.DestinationDir);
+                foreach (string dir in sourceDirs.Where(e => this.expandedSourceDirs.Exists(f => f.Equals(e, StringComparison.OrdinalIgnoreCase))))
+                {
+                    Console.WriteLine("{0}Copying {1}", Environment.NewLine, dir);
+                    this.writer.WriteLine("***********************************");
+                    this.writer.WriteLine("Copying {0}", dir);
 
-                this.CopyDir(dir, destination);
+                    string destination = dir.Replace(this.SourceDir, this.DestinationDir);
+
+                    this.CopyDir(dir, destination);
+                }
             }
-
-            return copySuccessful;
         }
 
+        /// <summary>
+        /// Copies a directory to a destination
+        /// </summary>
+        /// <param name="sourceDirectory">The source directory</param>
+        /// <param name="destinationDirectory">The destination directory</param>
         private void CopyDir(string sourceDirectory, string destinationDirectory)
         {
+            this.writer.WriteLine("Copying {0} to {1}", sourceDirectory, destinationDirectory);
+
             if (!Directory.Exists(destinationDirectory))
             {
                 Directory.CreateDirectory(destinationDirectory);
@@ -88,6 +121,12 @@
             }
         }
 
+        /// <summary>
+        /// Copies a file from a source to a destination
+        /// </summary>
+        /// <param name="sourceFile">The file to copy</param>
+        /// <param name="destinationFile">The file to copy to</param>
+        /// <returns><c>True</c> if the copy was successful</returns>
         private bool CopyFile(string sourceFile, string destinationFile)
         {
             bool copySuccessful = false;
@@ -95,6 +134,7 @@
             if (!File.Exists(destinationFile))
             {
                 Console.WriteLine("Copying {0}", sourceFile);
+                this.writer.WriteLine("Copying file {0}", sourceFile);
 
                 copySuccessful = this.TryCopy(sourceFile, destinationFile);
             }
@@ -106,6 +146,7 @@
                 if (DateTime.Compare(sourceModTime, destinationModTime) > 0)
                 {
                     Console.WriteLine("Copying {0}", sourceFile);
+                    this.writer.WriteLine("Copying file {0}", sourceFile);
 
                     copySuccessful = this.TryCopy(sourceFile, destinationFile);
                 }
@@ -114,6 +155,12 @@
             return copySuccessful;
         }
 
+        /// <summary>
+        /// Tries to copy a file from a source location to a destination
+        /// </summary>
+        /// <param name="sourceFile">The source location</param>
+        /// <param name="destinationFile">The destination</param>
+        /// <returns><c>True</c> if the copy was successful</returns>
         private bool TryCopy(string sourceFile, string destinationFile)
         {
             try
@@ -124,6 +171,7 @@
             catch (Exception e)
             {
                 Console.WriteLine("Failed to copy {0} because: {1}", sourceFile, e.ToString());
+                this.writer.WriteLine("Failed to copy {0} because: {1}", sourceFile, e.ToString());
                 return false;
             }
         }

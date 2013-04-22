@@ -3,8 +3,15 @@
     using System;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Executable to copy new files from a source to a destination
+    /// </summary>
     public static class BackupMain
     {
+        /// <summary>
+        /// The main entry of the program
+        /// </summary>
+        /// <param name="args">The arguments</param>
         static void Main(string[] args)
         {
             if (args.Length != 2)
