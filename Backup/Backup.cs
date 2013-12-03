@@ -22,7 +22,7 @@
         /// <param name="sourceDir">The source directory</param>
         /// <param name="destinationDir">The destination directory</param>
         /// <param name="l1Dirs">The level 1 directories in the source to copy to the destination</param>
-        public Backup(string sourceDir, string destinationDir, List<string> l1Dirs)
+        public Backup(string sourceDir, string destinationDir, IEnumerable<string> l1Dirs)
         {
             if (string.IsNullOrWhiteSpace(sourceDir))
             {
@@ -56,7 +56,7 @@
         /// <summary>
         /// Gets the list of level 1 directories
         /// </summary>
-        public List<string> L1Dirs { get; private set; }
+        public IEnumerable<string> L1Dirs { get; private set; }
 
         /// <summary>
         /// Gets the source directory
@@ -73,7 +73,7 @@
         /// </summary>
         public void CopyAllFiles()
         {
-            string path = Path.Combine(Path.GetTempPath(), "backup-" + DateTime.Now + ".txt");
+            string path = Path.Combine(Path.GetTempPath(), "backup-" + DateTime.Now.ToString("yyyyMMdd") + ".txt");
 
             using (this.writer = new StreamWriter(path))
             {
@@ -106,18 +106,27 @@
                 Directory.CreateDirectory(destinationDirectory);
             }
 
-            foreach (string sourceDir in Directory.EnumerateDirectories(sourceDirectory))
+            try
             {
-                string dest = sourceDir.Replace(this.SourceDir, this.DestinationDir);
 
-                CopyDir(sourceDir, dest);
+                foreach (string sourceDir in Directory.EnumerateDirectories(sourceDirectory))
+                {
+                    string dest = sourceDir.Replace(this.SourceDir, this.DestinationDir);
+
+                    CopyDir(sourceDir, dest);
+                }
+
+                foreach (string sourceFile in Directory.EnumerateFiles(sourceDirectory))
+                {
+                    string destFile = sourceFile.Replace(sourceDirectory, destinationDirectory);
+
+                    CopyFile(sourceFile, destFile);
+                }
             }
-
-            foreach (string sourceFile in Directory.EnumerateFiles(sourceDirectory))
+            catch (UnauthorizedAccessException e) 
             {
-                string destFile = sourceFile.Replace(sourceDirectory, destinationDirectory);
-
-                CopyFile(sourceFile, destFile);
+                Console.WriteLine("Encountered unauthorized access exception: {0}", e.ToString());
+                this.writer.WriteLine("Encountered unauthorized access exception {0}", e.ToString());
             }
         }
 
