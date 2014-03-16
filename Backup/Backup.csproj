@@ -7,7 +7,7 @@
     <ProjectGuid>{9F7B79F8-AB7F-43C0-B515-D7284C66B31B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BackUp</RootNamespace>
+    <RootNamespace>Backup</RootNamespace>
     <AssemblyName>Backup</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,9 +45,11 @@
     <Compile Include="Backup.cs" />
     <Compile Include="BackupMain.cs" />
     <Compile Include="ConsoleLog.cs" />
+    <Compile Include="Copier.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="ILog.cs" />
+    <Compile Include="LogExtensions.cs" />
     <Compile Include="MemoryLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

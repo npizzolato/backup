@@ -56,8 +56,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BackupTest.cs" />
+    <Compile Include="CopierTests.cs" />
     <Compile Include="FileLogTests.cs" />
+    <Compile Include="FileTestBase.cs" />
     <Compile Include="FileUtilsTest.cs" />
+    <Compile Include="LogExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

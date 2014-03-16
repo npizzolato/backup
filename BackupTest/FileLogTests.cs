@@ -4,39 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BackUp;
+using Backup;
 using FluentAssertions;
 using System.IO;
 
 namespace BackupTest
 {
     [TestClass]
-    public class FileLogTests
+    public class FileLogTests : FileTestBase
     {
-        private string log;
-        private string error;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            this.log = FileUtils.GetRandomFileName();
-            this.error = FileUtils.GetRandomFileName();
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            if (File.Exists(this.log))
-            {
-                File.Delete(this.log);
-            }
-
-            if (File.Exists(this.error))
-            {
-                File.Delete(this.error);
-            }
-        }
-
         [TestMethod]
         public void CtorThrowsWhenLogFileNull()
         {
@@ -54,33 +30,33 @@ namespace BackupTest
         [TestMethod]
         public void CtorCreatesFiles()
         {
-            new FileLog(log, error);
+            new FileLog(file1, file2);
 
-            File.Exists(log).Should().BeTrue();
-            File.Exists(error).Should().BeTrue();
+            File.Exists(file1).Should().BeTrue();
+            File.Exists(file2).Should().BeTrue();
 
-            File.Delete(log);
-            File.Delete(error);
+            File.Delete(file1);
+            File.Delete(file2);
         }
 
         [TestMethod]
         public void LogMessageAppendsToLogFile()
         {
-            File.WriteAllText(log, "a message");
-            var fileLog = new FileLog(log, error);
+            File.WriteAllText(file1, "a message");
+            var fileLog = new FileLog(file1, file2);
             fileLog.LogMessage("another message {0}", "here");
 
-            File.ReadAllText(log).Should().Be("a message" + Environment.NewLine + "another message here");
+            File.ReadAllText(file1).Should().Be("a message" + Environment.NewLine + "another message here");
         }
 
         [TestMethod]
         public void LogErrorAppendsToErrorFile()
         {
-            File.WriteAllText(error, "a message");
-            var fileLog = new FileLog(log, error);
+            File.WriteAllText(file2, "a message");
+            var fileLog = new FileLog(file1, file2);
             fileLog.LogError("another message {0}", "here");
 
-            File.ReadAllText(error).Should().Be("a message" + Environment.NewLine + "another message here");
+            File.ReadAllText(file2).Should().Be("a message" + Environment.NewLine + "another message here");
         }
     }
 }

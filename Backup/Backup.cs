@@ -1,4 +1,4 @@
-﻿namespace BackUp
+﻿namespace Backup
 {
     using System;
     using System.Collections.Generic;

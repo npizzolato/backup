@@ -5,39 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BackUp;
+using Backup;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BackupTest
 {
     [TestClass]
-    public class FileUtilsTest
+    public class FileUtilsTest : FileTestBase
     {
-        string file1;
-        string file2;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            this.file1 = FileUtils.GetRandomFileName();
-            this.file2 = FileUtils.GetRandomFileName();
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            if (File.Exists(this.file1))
-            {
-                File.Delete(this.file1);
-            }
-
-            if (File.Exists(this.file2))
-            {
-                File.Delete(this.file2);
-            }
-        }
-
         [TestMethod]
         public void WasFileCreatedFirstThrowsWhenFirstFileNull()
         {
