@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BackupTest.cs" />
     <Compile Include="FileLogTests.cs" />
+    <Compile Include="FileUtilsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

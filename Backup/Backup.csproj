@@ -46,7 +46,9 @@
     <Compile Include="BackupMain.cs" />
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="FileLog.cs" />
+    <Compile Include="FileUtils.cs" />
     <Compile Include="ILog.cs" />
+    <Compile Include="MemoryLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

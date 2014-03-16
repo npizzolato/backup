@@ -19,8 +19,8 @@ namespace BackupTest
         [TestInitialize]
         public void TestInitialize()
         {
-            this.log = GetFileName();
-            this.error = GetFileName();
+            this.log = FileUtils.GetRandomFileName();
+            this.error = FileUtils.GetRandomFileName();
         }
 
         [TestCleanup]
@@ -81,11 +81,6 @@ namespace BackupTest
             fileLog.LogError("another message {0}", "here");
 
             File.ReadAllText(error).Should().Be("a message" + Environment.NewLine + "another message here");
-        }
-
-        private static string GetFileName()
-        {
-            return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         }
     }
 }
