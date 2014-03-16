@@ -16,6 +16,7 @@
         private const string laterDestFile = "DestFile";
 
         [TestMethod]
+        [Ignore]
         public void ConstructorThrowsWhenSourceDirsIsNull()
         {
             string sourceDir = "";
@@ -36,6 +37,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public void ConstructorThrowsWhenDestDirsIsNull()
         {
             string sourceDir = Path.Combine(temp, "source");
@@ -56,6 +58,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public void ConstructorThrowsWhenL1DirsIsNull()
         {
             string sourceDir = Path.Combine(temp, "source");
@@ -76,6 +79,7 @@
         }
 
         [TestMethod]
+        [Ignore]
         public void CopyAllFilesCopiesCorrectFiles()
         {
             CreateTempFiles();
