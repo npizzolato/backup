@@ -69,6 +69,19 @@ namespace BackupTest
             FileUtils.CompareLastWriteTime(this.file1, this.file1).Should().Be(0);
         }
 
+        [TestMethod]
+        public void CopyDirectoryDoesNotExist()
+        {
+            CreateFile(this.file1);
+            this.file2 = Path.Combine(Path.GetTempPath(), "somedir", "anotherdir", Guid.NewGuid().ToString());
+            FileUtils.Copy(this.file1, this.file2, true);
+            File.Exists(this.file2).Should().BeTrue();
+
+            File.Delete(this.file2);
+            Directory.Delete(Path.Combine(Path.GetTempPath(), "somedir", "anotherdir"));
+            Directory.Delete(Path.Combine(Path.GetTempPath(), "somedir"));
+        }
+
         private static void CreateFile(string file)
         {
             var fs = File.Create(file);

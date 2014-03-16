@@ -43,14 +43,14 @@ namespace Backup
 
         public void LogMessage(string format, params object[] args)
         {
-            File.AppendAllText(this.logFile, Environment.NewLine);
-            File.AppendAllText(this.logFile, string.Format(CultureInfo.CurrentCulture, format, args));
+            string message = Environment.NewLine + string.Format(CultureInfo.CurrentCulture, format, args);
+            File.AppendAllText(this.logFile, message);
         }
 
         public void LogError(string format, params object[] args)
         {
-            File.AppendAllText(this.errorFile, Environment.NewLine);
-            File.AppendAllText(this.errorFile, string.Format(CultureInfo.CurrentCulture, format, args));
+            string message = Environment.NewLine + string.Format(CultureInfo.CurrentCulture, format, args);
+            File.AppendAllText(this.errorFile, message);
         }
     }
 }

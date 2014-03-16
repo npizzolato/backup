@@ -32,7 +32,7 @@ namespace Backup
             Exception ex = null;
             try
             {
-                File.Copy(src, dest, overwrite: true);
+                FileUtils.Copy(src, dest, overwrite: true);
             }
             catch (Exception e)
             {
@@ -53,8 +53,8 @@ namespace Backup
 
         public bool CopyIfNewer(string src, string dest)
         {
-            bool copied = false;
             this.CheckArguments(src, dest);
+            bool copied = false;
 
             if (!File.Exists(dest) || FileUtils.CompareLastWriteTime(src, dest) > 0)
             {

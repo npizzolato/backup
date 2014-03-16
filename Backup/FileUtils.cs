@@ -34,6 +34,17 @@ namespace Backup
             return DateTime.Compare(File.GetLastWriteTimeUtc(file1), File.GetLastWriteTimeUtc(file2));
         }
 
+        public static void Copy(string src, string dest, bool overwrite)
+        {
+            string dir = Path.GetDirectoryName(dest);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.Copy(src, dest, overwrite);
+        }
+
         public static string GetRandomFileName()
         {
             return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
