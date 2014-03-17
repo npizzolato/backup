@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backup.cs" />
     <Compile Include="BackupMain.cs" />
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="Copier.cs" />

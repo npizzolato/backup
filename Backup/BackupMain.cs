@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     /// <summary>
@@ -25,15 +26,31 @@
             }
 
             IEnumerable<string> copyDirs = GetDirectoriesToCopy(args);
+            string srcRoot = args[0];
+            string destRoot = args[1];
 
             if (copyDirs == null || !copyDirs.Any())
             {
                 throw new InvalidOperationException("There were no directories found to back up.");
             }
 
-            Backup backup = new Backup(args[0], args[1], copyDirs);
+            string logDir = Path.Combine(Path.GetTempPath(), "backup");
+            string logPathWithoutExtension = Path.Combine(logDir, "backup-" + DateTime.Now.ToString("yyyyMMdd"));
+            string log = logPathWithoutExtension + ".log";
+            string err = logPathWithoutExtension = ".err";
+            if (!Directory.Exists(logDir))
+            {
+                Directory.CreateDirectory(logDir);
+            }
 
-            backup.CopyAllFiles();
+            Copier copier = new Copier(new List<ILog>() { new ConsoleLog(), new FileLog(log, err) });
+
+            foreach (string dir in copyDirs)
+            {
+                string src = Path.Combine(srcRoot, dir);
+                string dest = Path.Combine(destRoot, dir);
+                copier.UpdateDirectory(src, dest);
+            }
         }
 
         /// <summary>

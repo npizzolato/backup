@@ -55,7 +55,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BackupTest.cs" />
     <Compile Include="CopierTests.cs" />
     <Compile Include="FileLogTests.cs" />
     <Compile Include="FileTestBase.cs" />
