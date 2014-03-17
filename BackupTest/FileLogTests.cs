@@ -1,15 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backup;
-using FluentAssertions;
-using System.IO;
-
-namespace BackupTest
+﻿namespace BackupTest
 {
+    using System;
+    using System.IO;
+    using Backup;
+    using FluentAssertions;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public class FileLogTests : FileTestBase
     {

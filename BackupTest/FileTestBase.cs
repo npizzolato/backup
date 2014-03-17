@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backup;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace BackupTest
+﻿namespace BackupTest
 {
+    using System.IO;
+    using Backup;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public abstract class FileTestBase
     {
