@@ -1,21 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Backup
+﻿namespace Backup
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    /// <summary>
+    /// Class to copy files
+    /// </summary>
     public class Copier
     {
         private readonly IEnumerable<ILog> logs;
 
+        /// <summary>
+        /// Initializes a new instance of a Copier.
+        /// </summary>
+        /// <param name="log">The log to use.</param>
         public Copier(ILog log)
             : this(new List<ILog>() { log })
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of a Copier.
+        /// </summary>
+        /// <param name="logs">The logs to use.</param>
         public Copier(IEnumerable<ILog> logs)
         {
             if (logs == null)
@@ -26,6 +34,12 @@ namespace Backup
             this.logs = logs;
         }
 
+        /// <summary>
+        /// Tries to copy a file to a destination.
+        /// </summary>
+        /// <param name="src">The source file.</param>
+        /// <param name="dest">The destination file.</param>
+        /// <returns>True if the file was copied.</returns>
         public bool TryCopy(string src, string dest)
         {
             this.CheckArguments(src, dest);
@@ -51,7 +65,13 @@ namespace Backup
             return ex == null;
         }
 
-        public bool CopyIfNewer(string src, string dest)
+        /// <summary>
+        /// Tries to copy a file if it is newer than the destination.
+        /// </summary>
+        /// <param name="src">The source file.</param>
+        /// <param name="dest">The destination file.</param>
+        /// <returns>True if the file was copied.</returns>
+        public bool TryCopyIfNewer(string src, string dest)
         {
             this.CheckArguments(src, dest);
             bool copied = false;
@@ -64,6 +84,11 @@ namespace Backup
             return copied;
         }
 
+        /// <summary>
+        /// Updates all files in the directory and subdirectory that are newer than the destination.
+        /// </summary>
+        /// <param name="src">The source directory.</param>
+        /// <param name="dest">The destination directory.</param>
         public void UpdateDirectory(string src, string dest)
         {
             if (string.IsNullOrEmpty(src))
@@ -88,7 +113,7 @@ namespace Backup
             {
                 string filename = Path.GetFileName(sourceFile);
                 string destFile = Path.Combine(dest, filename);
-                this.CopyIfNewer(sourceFile, destFile);
+                this.TryCopyIfNewer(sourceFile, destFile);
             }
 
             foreach (string sourceDir in sourceDirs)
@@ -99,6 +124,11 @@ namespace Backup
             }
         }
 
+        /// <summary>
+        /// Checks whether the arguments to a function are correct.
+        /// </summary>
+        /// <param name="src">The source.</param>
+        /// <param name="dest">The destination.</param>
         private void CheckArguments(string src, string dest)
         {
             if (string.IsNullOrEmpty(src))

@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace Backup
 {
+    /// <summary>
+    /// Utilities for dealing with paths.
+    /// </summary>
     public static class PathUtils
     {
+        /// <summary>
+        /// Gets the leaf directory in a path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetLeafDirectory(string path)
         {
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");

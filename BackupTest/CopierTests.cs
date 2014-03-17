@@ -79,7 +79,7 @@ namespace BackupTest
             File.WriteAllText(this.file1, "file");
             Copier copier = new Copier(new MemoryLog());
 
-            copier.CopyIfNewer(this.file1, this.file2).Should().BeTrue();
+            copier.TryCopyIfNewer(this.file1, this.file2).Should().BeTrue();
             File.ReadAllText(this.file2).Should().Be("file");
         }
 
@@ -89,7 +89,7 @@ namespace BackupTest
             Action action = () =>
                 {
                     Copier copier = new Copier(new MemoryLog());
-                    copier.CopyIfNewer(this.file1, this.file2);
+                    copier.TryCopyIfNewer(this.file1, this.file2);
                 };
             action.ShouldThrow<FileNotFoundException>();
         }
@@ -102,7 +102,7 @@ namespace BackupTest
             File.WriteAllText(this.file1, "file1");
             Copier copier = new Copier(new MemoryLog());
 
-            copier.CopyIfNewer(this.file1, this.file2).Should().BeTrue();
+            copier.TryCopyIfNewer(this.file1, this.file2).Should().BeTrue();
             File.ReadAllText(this.file2).Should().Be("file1");
         }
 
@@ -114,7 +114,7 @@ namespace BackupTest
             File.WriteAllText(this.file2, "file2");
             Copier copier = new Copier(new MemoryLog());
 
-            copier.CopyIfNewer(this.file1, this.file2).Should().BeFalse();
+            copier.TryCopyIfNewer(this.file1, this.file2).Should().BeFalse();
             File.ReadAllText(this.file2).Should().Be("file2");
         }
 
@@ -125,7 +125,7 @@ namespace BackupTest
             File.Copy(this.file1, this.file2);
             Copier copier = new Copier(new MemoryLog());
 
-            copier.CopyIfNewer(this.file1, this.file2).Should().BeFalse();
+            copier.TryCopyIfNewer(this.file1, this.file2).Should().BeFalse();
             File.ReadAllText(this.file2).Should().Be("file1");
         }
 
