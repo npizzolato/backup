@@ -128,5 +128,105 @@ namespace BackupTest
             copier.CopyIfNewer(this.file1, this.file2).Should().BeFalse();
             File.ReadAllText(this.file2).Should().Be("file1");
         }
+
+        [TestMethod]
+        public void UpdateDirectorySourceDoesNotExist()
+        {
+            string dir1 = Path.Combine(Path.GetTempPath(), "dir1");
+            string dir2 = Path.Combine(Path.GetTempPath(), "dir2");
+            Action action = () =>
+                {
+                    Copier copier = new Copier(new MemoryLog());
+                    copier.UpdateDirectory(dir1, dir2);
+                };
+            action.ShouldThrow<DirectoryNotFoundException>();
+        }
+
+        [TestMethod]
+        public void UpdateDirectoryDestinationDoesNotExist()
+        {
+            string dir1 = Path.Combine(Path.GetTempPath(), "dir1");
+            string dir2 = Path.Combine(Path.GetTempPath(), "dir2");
+            string file1 = Path.Combine(dir1, "file");
+            string file2 = Path.Combine(dir2, "file");
+            Directory.CreateDirectory(dir1);
+            File.WriteAllText(file1, "contents");
+            Copier copier = new Copier(new MemoryLog());
+
+            try
+            {
+                copier.UpdateDirectory(dir1, dir2);
+                Directory.Exists(dir2).Should().BeTrue();
+                File.Exists(file2).Should().BeTrue();
+            }
+            finally
+            {
+                File.Delete(file1);
+                File.Delete(file2);
+                Directory.Delete(dir1);
+                Directory.Delete(dir2);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateDirectoryDestinationExists()
+        {
+            string dir1 = Path.Combine(Path.GetTempPath(), "dir1");
+            string dir2 = Path.Combine(Path.GetTempPath(), "dir2");
+            string file1 = Path.Combine(dir1, "file");
+            string file2 = Path.Combine(dir2, "file");
+            Directory.CreateDirectory(dir1);
+            Directory.CreateDirectory(dir2);
+            File.WriteAllText(file1, "contents");
+            Copier copier = new Copier(new MemoryLog());
+
+            try
+            {
+                copier.UpdateDirectory(dir1, dir2);
+                Directory.Exists(dir2).Should().BeTrue();
+                File.Exists(file2).Should().BeTrue();
+            }
+            finally
+            {
+                File.Delete(file1);
+                File.Delete(file2);
+                Directory.Delete(dir1);
+                Directory.Delete(dir2);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateDirectorySubdirectories()
+        {
+            string dir1 = Path.Combine(Path.GetTempPath(), "dir1");
+            string subdir1 = Path.Combine(dir1, "subpath");
+            string dir2 = Path.Combine(Path.GetTempPath(), "dir2");
+            string subdir2 = Path.Combine(dir2, "subpath");
+            string file1 = Path.Combine(subdir1, "file");
+            string file2 = Path.Combine(subdir2, "file");
+            Directory.CreateDirectory(dir1);
+            Directory.CreateDirectory(subdir1);
+            File.WriteAllText(file1, "contents");
+            Copier copier = new Copier(new MemoryLog());
+
+            try
+            {
+                copier.UpdateDirectory(dir1, dir2);
+                Directory.Exists(dir2).Should().BeTrue();
+                Directory.Exists(subdir2).Should().BeTrue();
+                File.Exists(file2).Should().BeTrue();
+            }
+            finally
+            {
+
+                File.Delete(file1);
+                Directory.Delete(subdir1);
+                Directory.Delete(dir1);
+
+                File.Delete(file2);
+                Directory.Delete(subdir2);
+                Directory.Delete(dir2);
+            }
+        }
     }
 }

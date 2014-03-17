@@ -61,6 +61,7 @@
     <Compile Include="FileTestBase.cs" />
     <Compile Include="FileUtilsTest.cs" />
     <Compile Include="LogExtensionsTests.cs" />
+    <Compile Include="PathUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -64,6 +64,41 @@ namespace Backup
             return copied;
         }
 
+        public void UpdateDirectory(string src, string dest)
+        {
+            if (string.IsNullOrEmpty(src))
+            {
+                throw new ArgumentNullException("src");
+            }
+
+            if (string.IsNullOrEmpty(dest))
+            {
+                throw new ArgumentNullException("dest");
+            }
+
+            if (!Directory.Exists(src))
+            {
+                throw new DirectoryNotFoundException(string.Format("Directory '{0}' does not exist.", src));
+            }
+
+            IEnumerable<string> sourceFiles = Directory.EnumerateFiles(src);
+            IEnumerable<string> sourceDirs = Directory.EnumerateDirectories(src);
+
+            foreach (string sourceFile in sourceFiles)
+            {
+                string filename = Path.GetFileName(sourceFile);
+                string destFile = Path.Combine(dest, filename);
+                this.CopyIfNewer(sourceFile, destFile);
+            }
+
+            foreach (string sourceDir in sourceDirs)
+            {
+                string dirname = PathUtils.GetLeafDirectory(sourceDir);
+                string destDir = Path.Combine(dest, dirname);
+                this.UpdateDirectory(sourceDir, destDir);
+            }
+        }
+
         private void CheckArguments(string src, string dest)
         {
             if (string.IsNullOrEmpty(src))

@@ -51,6 +51,7 @@
     <Compile Include="ILog.cs" />
     <Compile Include="LogExtensions.cs" />
     <Compile Include="MemoryLog.cs" />
+    <Compile Include="PathUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
